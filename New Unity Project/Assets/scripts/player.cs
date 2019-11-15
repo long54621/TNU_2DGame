@@ -12,4 +12,37 @@ public class player : MonoBehaviour
     public bool isGriund = false;
     [Header("角色名稱")]
     public string Name = "Long";
+    [Header("2D 剛體")]
+    public Rigidbody2D r2d;
+
+    private void Move()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        r2d.AddForce(new Vector2(speed*h ,0));
+        
+    }
+    
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGriund == true)
+        {
+            isGriund = false;
+            r2d.AddForce(new Vector2(0, jump));
+        }
+    }
+
+    private void Dead()
+    {
+
+    }
+    private void Update()
+    {
+        Move();
+        Jump();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        isGriund = true;
+    }
 }
