@@ -14,12 +14,21 @@ public class player : MonoBehaviour
     public string Name = "Long";
     [Header("2D 剛體")]
     public Rigidbody2D r2d;
+    public Animator ani;
+
+    [Header("音效區域")]
+    public AudioSource aud;
+    public AudioClip soundDiamond;
+
 
     private void Move()
     {
         float h = Input.GetAxisRaw("Horizontal");
         r2d.AddForce(new Vector2(speed*h ,0));
-        
+        ani.SetBool("跑步開關", h != 0);
+
+        if (Input.GetKeyDown(KeyCode.A)) transform.eulerAngles = new Vector3(0, 180, 0);
+        else if (Input.GetKeyDown(KeyCode.D)) transform.eulerAngles = new Vector3(0, 0, 0);
     }
     
     private void Jump()
@@ -28,6 +37,7 @@ public class player : MonoBehaviour
         {
             isGriund = false;
             r2d.AddForce(new Vector2(0, jump));
+            ani.SetTrigger("跑步開關");
         }
     }
 
@@ -43,6 +53,9 @@ public class player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        isGriund = true;
+        if(collision.gameObject.name == "地板")
+        {
+            isGriund = true;
+        }
     }
 }
